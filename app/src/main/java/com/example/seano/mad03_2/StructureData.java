@@ -63,11 +63,6 @@ public class StructureData
 
     protected StructureData() {}
 
-    public List<Structure> getStructureList()
-    {
-        return structureList;
-    }
-
     public Structure get(int i)
     {
         return structureList.get(i);

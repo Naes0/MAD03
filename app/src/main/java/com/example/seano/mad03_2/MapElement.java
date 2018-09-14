@@ -15,8 +15,7 @@ package com.example.seano.mad03_2;
  *
  * This will cause the ImageView to display the grid square's north-western terrain image,
  * whatever it is.
- *
- * (The terrain is broken up like this because there are a lot of possible combinations of terrain
+ * * (The terrain is broken up like this because there are a lot of possible combinations of terrain
  * images for each grid square. If we had a single terrain image for each square, we'd need to
  * manually combine all the possible combinations of images, and we'd get a small explosion of
  * image files.)

@@ -13,7 +13,6 @@ import java.util.List;
 public class MapFragment extends Fragment
 {
     private MapData map;
-    private RecyclerView rv;
 
     @Override
     public void onCreate(Bundle b)
@@ -44,16 +43,18 @@ public class MapFragment extends Fragment
         public GridViewHolder(LayoutInflater li, ViewGroup parent)
         {
             super(li.inflate(R.layout.grid_cell, parent, false));
+
+            int size = parent.getMeasuredHeight() / MapData.HEIGHT+2;
+            ViewGroup.LayoutParams lp = itemView.getLayoutParams();
+            lp.width = size;
+            lp.height = size;
+
             imageView1 = (ImageView) itemView.findViewById(R.id.imageView1);
             imageView2 = (ImageView) itemView.findViewById(R.id.imageView2);
             imageView3 = (ImageView) itemView.findViewById(R.id.imageView3);
             imageView4 = (ImageView) itemView.findViewById(R.id.imageView4);
             imageView5 = (ImageView) itemView.findViewById(R.id.imageView5);
 
-            int size = parent.getMeasuredHeight() / MapData.HEIGHT + 1;
-            ViewGroup.LayoutParams lp = itemView.getLayoutParams();
-            lp.width = size;
-            lp.height = size;
         }
 
         public void bind(MapElement mapEle)
@@ -61,12 +62,16 @@ public class MapFragment extends Fragment
             imageView1.setImageResource(mapEle.getNorthWest());
             imageView2.setImageResource(mapEle.getNorthEast());
             imageView3.setImageResource(mapEle.getSouthWest());
-            imageView4.setImageResource(mapEle.getNorthEast());
+            imageView4.setImageResource(mapEle.getSouthEast());
+            if (mapEle.getStructure() != null)
+            {
+                imageView5.setImageResource(mapEle.getStructure().getDrawableId());
+            }
         }
     }
+
     public class GridAdapter extends RecyclerView.Adapter<GridViewHolder>
     {
-
         @Override
         public GridViewHolder onCreateViewHolder( ViewGroup parent, int viewType)
         {
