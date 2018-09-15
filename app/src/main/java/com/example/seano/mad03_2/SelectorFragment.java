@@ -18,7 +18,7 @@ import java.util.List;
 public class SelectorFragment extends Fragment
 {
     StructureData structData;
-
+    Structure currStruct;
     @Override
     public void onCreate(Bundle b)
     {
@@ -39,7 +39,6 @@ public class SelectorFragment extends Fragment
 
     private class SelectViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
-        Structure currStruct;
         ImageView image;
         TextView text;
 
@@ -53,6 +52,7 @@ public class SelectorFragment extends Fragment
 
         public void bind(Structure data)
         {
+            currStruct = data;
             image.setImageResource(data.getDrawableId());
             text.setText(data.getLabel());
         }
@@ -60,7 +60,8 @@ public class SelectorFragment extends Fragment
         @Override
         public void onClick(View view)
         {
-            Toast.makeText(getActivity(),  )
+            Toast.makeText(getActivity(), currStruct.getLabel() + currStruct.getDrawableId(), Toast.LENGTH_LONG)
+            .show();
         }
     }
 
