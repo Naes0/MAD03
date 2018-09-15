@@ -8,17 +8,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import java.util.List;
+import android.widget.Toast;
 
 public class MapFragment extends Fragment
 {
     private MapData map;
+    private SelectorFragment selector;
+    private GridAdapter adapter;
 
     @Override
     public void onCreate(Bundle b)
     {
         super.onCreate(b);
         map = MapData.get();
+        adapter = new GridAdapter();
     }
 
     @Override
@@ -27,24 +30,26 @@ public class MapFragment extends Fragment
         View view = inflater.inflate(R.layout.fragment_map, ui,false);
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.mapRecyclerView);
         rv.setLayoutManager(new GridLayoutManager(getActivity(), MapData.HEIGHT, GridLayoutManager.HORIZONTAL, false));
-        GridAdapter adapter = new GridAdapter();
+        adapter = new GridAdapter();
         rv.setAdapter(adapter);
         return view;
     }
 
     private class GridViewHolder extends RecyclerView.ViewHolder
     {
+        boolean buildable;
         private ImageView imageView1;
         private ImageView imageView2;
         private ImageView imageView3;
         private ImageView imageView4;
         private ImageView imageView5;
-        
+
+        //Viewholder
         public GridViewHolder(LayoutInflater li, ViewGroup parent)
         {
             super(li.inflate(R.layout.grid_cell, parent, false));
 
-            int size = parent.getMeasuredHeight() / MapData.HEIGHT+2;
+            int size = parent.getMeasuredHeight() / MapData.HEIGHT+1;
             ViewGroup.LayoutParams lp = itemView.getLayoutParams();
             lp.width = size;
             lp.height = size;
@@ -54,7 +59,21 @@ public class MapFragment extends Fragment
             imageView3 = (ImageView) itemView.findViewById(R.id.imageView3);
             imageView4 = (ImageView) itemView.findViewById(R.id.imageView4);
             imageView5 = (ImageView) itemView.findViewById(R.id.imageView5);
+            buildable = false;
 
+            imageView5.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    Structure selection = selector.getStructure();
+                    if( selection != null && buildable)
+                    {
+                        imageView5.setImageResource(selection.getDrawableId());
+                        adapter.notifyItemChanged(getAdapterPosition());
+                    }
+                }
+            });
         }
 
         public void bind(MapElement mapEle)
@@ -63,13 +82,11 @@ public class MapFragment extends Fragment
             imageView2.setImageResource(mapEle.getNorthEast());
             imageView3.setImageResource(mapEle.getSouthWest());
             imageView4.setImageResource(mapEle.getSouthEast());
-            if (mapEle.getStructure() != null)
-            {
-                imageView5.setImageResource(mapEle.getStructure().getDrawableId());
-            }
+            buildable = mapEle.isBuildable();
         }
     }
 
+    //adapter
     public class GridAdapter extends RecyclerView.Adapter<GridViewHolder>
     {
         @Override
@@ -92,5 +109,10 @@ public class MapFragment extends Fragment
         {
             return MapData.HEIGHT*MapData.WIDTH;
         }
+    }
+
+    public void setSelector(Fragment selFrag)
+    {
+        selector = (SelectorFragment) selFrag;
     }
 }

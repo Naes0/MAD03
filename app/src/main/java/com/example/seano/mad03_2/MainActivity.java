@@ -16,15 +16,17 @@ public class MainActivity extends AppCompatActivity
         FragmentManager fm = getSupportFragmentManager();
         Fragment mapFrag = fm.findFragmentById(R.id.map);
         Fragment selectorFrag = fm.findFragmentById(R.id.selector);
-        if (mapFrag == null)
-        {
-            mapFrag = new MapFragment();
-            fm.beginTransaction().add(R.id.map, mapFrag).commit();
-        }
         if (selectorFrag == null)
         {
             selectorFrag = new SelectorFragment();
             fm.beginTransaction().add(R.id.selector, selectorFrag).commit();
+        }
+
+        if (mapFrag == null)
+        {
+            mapFrag = new MapFragment();
+            ((MapFragment) mapFrag).setSelector(selectorFrag);
+            fm.beginTransaction().add(R.id.map, mapFrag).commit();
         }
     }
 }

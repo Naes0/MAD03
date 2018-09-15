@@ -18,7 +18,8 @@ import java.util.List;
 public class SelectorFragment extends Fragment
 {
     StructureData structData;
-    Structure currStruct;
+    Structure selected;
+
     @Override
     public void onCreate(Bundle b)
     {
@@ -41,6 +42,7 @@ public class SelectorFragment extends Fragment
     {
         ImageView image;
         TextView text;
+        Structure currStruct;
 
         public SelectViewHolder(LayoutInflater li, ViewGroup parent)
         {
@@ -60,8 +62,7 @@ public class SelectorFragment extends Fragment
         @Override
         public void onClick(View view)
         {
-            Toast.makeText(getActivity(), currStruct.getLabel() + currStruct.getDrawableId(), Toast.LENGTH_LONG)
-            .show();
+            selected = currStruct;
         }
     }
 
@@ -85,7 +86,11 @@ public class SelectorFragment extends Fragment
         {
             return structData.size();
         }
-}
+    }
 
+    public Structure getStructure()
+    {
+        return selected;
+    }
 
 }
