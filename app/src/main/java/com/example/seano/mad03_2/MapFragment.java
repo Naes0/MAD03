@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 public class MapFragment extends Fragment
 {
@@ -43,6 +42,7 @@ public class MapFragment extends Fragment
         private ImageView imageView3;
         private ImageView imageView4;
         private ImageView imageView5;
+        private MapElement mapEle;
 
         //Viewholder
         public GridViewHolder(LayoutInflater li, ViewGroup parent)
@@ -67,9 +67,9 @@ public class MapFragment extends Fragment
                 public void onClick(View view)
                 {
                     Structure selection = selector.getStructure();
-                    if( selection != null && buildable)
+                    if( (selection != null) && buildable)
                     {
-                        imageView5.setImageResource(selection.getDrawableId());
+                        mapEle.setStructure(selection);
                         adapter.notifyItemChanged(getAdapterPosition());
                     }
                 }
@@ -78,11 +78,20 @@ public class MapFragment extends Fragment
 
         public void bind(MapElement mapEle)
         {
+            buildable = mapEle.isBuildable();
             imageView1.setImageResource(mapEle.getNorthWest());
             imageView2.setImageResource(mapEle.getNorthEast());
             imageView3.setImageResource(mapEle.getSouthWest());
             imageView4.setImageResource(mapEle.getSouthEast());
-            buildable = mapEle.isBuildable();
+            if (mapEle.getStructure() != null)
+            {
+                imageView5.setImageResource(mapEle.getStructure().getDrawableId());
+            }
+            else
+            {
+                imageView5.setImageResource(0);
+            }
+            this.mapEle = mapEle;
         }
     }
 
@@ -90,7 +99,7 @@ public class MapFragment extends Fragment
     public class GridAdapter extends RecyclerView.Adapter<GridViewHolder>
     {
         @Override
-        public GridViewHolder onCreateViewHolder( ViewGroup parent, int viewType)
+        public GridViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
         {
             LayoutInflater li = LayoutInflater.from(getActivity());
             return new GridViewHolder(li, parent);
